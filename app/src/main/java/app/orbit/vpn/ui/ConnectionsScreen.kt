@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FilterChip
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -78,10 +77,15 @@ fun ConnectionsScreen(onBack: () -> Unit) {
                 TextButton(onClick = ConnectionsMonitor::closeAll) { Text(stringResource(R.string.connections_close_all)) }
             }
         }
-        Row(Modifier.padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilterChip(selected = !journal, onClick = { journal = false }, label = { Text(stringResource(R.string.connections_active)) })
-            FilterChip(selected = journal, onClick = { journal = true }, label = { Text(stringResource(R.string.connections_journal)) })
-        }
+        PillTabs(
+            listOf(
+                stringResource(R.string.connections_active),
+                stringResource(R.string.connections_journal),
+            ),
+            if (journal) 1 else 0,
+            { journal = it == 1 },
+            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        )
         if (journal) Text(
             stringResource(R.string.connections_journal_hint),
             style = MaterialTheme.typography.bodySmall,
