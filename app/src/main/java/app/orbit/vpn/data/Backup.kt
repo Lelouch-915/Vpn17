@@ -53,7 +53,7 @@ data class Backup(
 
     companion object {
         private const val APP = "orbit"
-        private const val VERSION = 1
+        private const val VERSION = 2
         private const val KDF = "PBKDF2-HMAC-SHA256"
         private const val CIPHER = "AES-256-GCM"
         const val ITERATIONS = 600_000

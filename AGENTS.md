@@ -47,7 +47,9 @@ and every new string needs both.
 
 - `model/`
   - `ProxyNode`: node with `transport` and `subscriptionId`.
-  - `Subscription` and `SubscriptionUsage`: parse the `subscription-userinfo` header.
+  - `Subscription` stores an optional per-subscription `userAgent` (null uses Orbit's default).
+    `SubscriptionUsage` parses the `subscription-userinfo` header. User-Agent is configurable in
+    the add/edit subscription dialog; printable ASCII only, blank resets to default.
   - `RuleConfig.kt`: `Policy`, `RoutingRule`, `RuleConfig` and `RuleStore`. `RuleStore` holds
     the active config id and the user configs; the built-in `RuleConfig.DEFAULT` (id `default`)
     is implicit, never stored, and read-only.
@@ -68,7 +70,8 @@ and every new string needs both.
   - `NodeRepository`: `state.json` holds nodes, settings, subscriptions and user rules;
     `rule-configs.json` holds the `RuleStore`. The legacy single-config `rules.json` is
     migrated on load. Saved nodes are re-parsed from their links at startup.
-  - `SubscriptionUpdater`: subscriptions, rule-config import and GeoIP `.srs` download into
+  - `SubscriptionUpdater`: uses each subscription's User-Agent for add, edit and all refreshes.
+    Edits replace settings and nodes only after a successful fetch. Also handles rule-config import and GeoIP `.srs` download into
     `files/box/`, plus the WorkManager worker (every 12 h).
   - `Updates`: app updates from GitHub Releases of `nettlecode/Orbit-VPN-Client` (`Updates.REPO`).
     It picks `Orbit-<version>-<abi>.apk` for `Build.SUPPORTED_ABIS` (else `-universal`), checks it
@@ -79,7 +82,8 @@ and every new string needs both.
   - `TrafficHistory`: hourly buckets for 35 days in `traffic.json`.
   - `Backup`: versioned JSON (`app: "orbit"`, `version`) with `AppState` and `RuleStore`, written
     and read through SAF from Settings. Restore replaces everything after a confirmation. When the
-    stored data changes shape, bump `version` and keep decoding older files.
+    stored data changes shape, bump `version` and keep decoding older files. Current version is 2
+    (subscription User-Agent); version 1 remains readable.
   - Encryption is optional: with a password the file is an `Encrypted` envelope (AES-256-GCM).
     The key comes from PBKDF2-HMAC-SHA256 with 600k iterations, about 1 s on a device. The KDF
     and its parameters are stored in the file.

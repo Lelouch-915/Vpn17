@@ -32,7 +32,7 @@ class BackupTest {
             mode = RoutingMode.GLOBAL,
             remoteDns = "tls://1.1.1.1",
             ipv6 = true,
-            subscriptions = listOf(Subscription(name = "sub", url = "https://sub.example/x")),
+            subscriptions = listOf(Subscription(name = "sub", url = "https://sub.example/x", userAgent = "v2rayNG/1.10.0")),
             autoUpdateSubscriptions = false,
             userRules = listOf(RoutingRule(Policy.DIRECT, packages = listOf("com.example"))),
         ),
@@ -77,8 +77,17 @@ class BackupTest {
         Backup.open("""{"nodes": []}""")
     }
 
+    @Test
+    fun readsVersionOneWithoutUserAgent() {
+        val old = backup.copy(version = 1, state = backup.state.copy(subscriptions = listOf(
+            Subscription(name = "sub", url = "https://sub.example/x"),
+        )))
+        val text = Backup.encode(old).replace(Regex(",\\s*\"userAgent\"\\s*:\\s*null"), "")
+        assertEquals(Backup.Opened.Plain(old), Backup.open(text))
+    }
+
     @Test(expected = IllegalArgumentException::class)
     fun rejectsNewerVersion() {
-        Backup.open(Backup.encode(backup).replace("\"version\": 1", "\"version\": 99"))
+        Backup.open(Backup.encode(backup).replace("\"version\": ${backup.version}", "\"version\": 99"))
     }
 }

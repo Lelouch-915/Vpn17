@@ -34,7 +34,9 @@ apksigner verify --print-certs Orbit-<version>-arm64-v8a.apk
 - **Protocols**: Shadowsocks (with plugins), VMess, VLESS (Reality, XHTTP), Trojan, Hysteria2,
   TUIC, SOCKS, HTTP. Transports: WebSocket, gRPC, HTTP/2, HTTPUpgrade, XHTTP.
 - **Import**: share links, QR codes, clipboard, base64 subscriptions. Subscriptions show
-  traffic usage and expiry from `subscription-userinfo` and update automatically.
+  traffic usage and expiry from `subscription-userinfo` and update automatically. An optional
+  per-subscription User-Agent can be set when adding or editing a subscription for providers
+  that choose the response format by client. Blank uses Orbit's default.
 - **Manual setup**: Add profile → Enter manually, choose a protocol and enter the server
   parameters to create a local server without a share link.
 - **Server editor**: long-press a server to edit its address, port, credentials, transport and

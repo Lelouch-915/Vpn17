@@ -12,6 +12,8 @@ data class Subscription(
     val usage: SubscriptionUsage? = null,
     /** Last update error, cleared on success. */
     val error: String? = null,
+    /** Null uses Orbit's default User-Agent. */
+    val userAgent: String? = null,
 )
 
 /** Parsed `subscription-userinfo` response header. Byte counts; expire is epoch seconds. */
@@ -44,4 +46,10 @@ data class SubscriptionUsage(
             )
         }
     }
+}
+
+/** Rejects header control characters; blank means the app's default agent. */
+fun normalizeSubscriptionUserAgent(value: String?): String? {
+    require(value == null || value.all { it.code in 32..126 }) { "User-Agent must contain printable ASCII only" }
+    return value?.trim()?.ifEmpty { null }
 }

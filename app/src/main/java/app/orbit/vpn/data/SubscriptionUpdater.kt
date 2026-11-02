@@ -14,6 +14,7 @@ import app.orbit.vpn.model.ProxyNode
 import app.orbit.vpn.model.RoutingRule
 import app.orbit.vpn.model.RuleConfig
 import app.orbit.vpn.model.Subscription
+import app.orbit.vpn.model.normalizeSubscriptionUserAgent
 import app.orbit.vpn.model.SubscriptionUsage
 import app.orbit.vpn.parser.LinkParser
 import app.orbit.vpn.parser.ShadowrocketConfigParser
@@ -30,11 +31,23 @@ class SubscriptionUpdater(private val context: Context, private val repository: 
     private class Fetched(val subscription: Subscription, val nodes: List<ProxyNode>)
 
     /** Adds and immediately fetches a subscription. Returns the number of servers. */
-    suspend fun add(url: String, name: String?): Int {
-        val draft = Subscription(name = name?.takeIf { it.isNotBlank() } ?: hostOf(url), url = url.trim())
+    suspend fun add(url: String, name: String?, userAgent: String? = null): Int {
+        val draft = Subscription(name = name?.takeIf { it.isNotBlank() } ?: hostOf(url), url = url.trim(), userAgent = normalizeSubscriptionUserAgent(userAgent))
         val fetched = fetch(draft, keepName = !name.isNullOrBlank())
         repository.addSubscription(fetched.subscription)
         repository.applySubscriptionUpdate(fetched.subscription, fetched.nodes)
+        return fetched.nodes.size
+    }
+
+    /** Applies edited settings only after a successful fetch. */
+    suspend fun edit(id: String, url: String, name: String?, userAgent: String?): Int {
+        val original = repository.state.value.subscriptions.firstOrNull { it.id == id } ?: return 0
+        val fetched = fetch(original.copy(
+            url = url.trim(), name = name?.takeIf { it.isNotBlank() } ?: hostOf(url),
+            userAgent = normalizeSubscriptionUserAgent(userAgent),
+        ), keepName = !name.isNullOrBlank())
+        repository.applySubscriptionUpdate(fetched.subscription, fetched.nodes)
+        OrbitVpnService.reload(context)
         return fetched.nodes.size
     }
 
@@ -57,7 +70,7 @@ class SubscriptionUpdater(private val context: Context, private val repository: 
     }
 
     private suspend fun fetch(subscription: Subscription, keepName: Boolean): Fetched = withContext(Dispatchers.IO) {
-        val response = Http.get(subscription.url)
+        val response = Http.get(subscription.url, subscription.userAgent)
         val nodes = LinkParser.parseAll(response.body)
         check(nodes.isNotEmpty()) { "no supported servers in subscription" }
         val title = response.headers["profile-title"]?.let(::decodeTitle)

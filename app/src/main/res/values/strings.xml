@@ -306,4 +306,8 @@
     <string name="add_node_manual">Enter manually</string>
     <string name="node_create_title">New server</string>
     <string name="node_create_protocol">Choose protocol</string>
+    <string name="subscription_edit">Edit subscription</string>
+    <string name="subscription_user_agent">User-Agent (optional)</string>
+    <string name="subscription_user_agent_hint">Leave blank to use Orbit. Some providers choose the subscription format by User-Agent.</string>
+    <string name="subscription_user_agent_invalid">Use printable Latin characters, digits and punctuation.</string>
 </resources>

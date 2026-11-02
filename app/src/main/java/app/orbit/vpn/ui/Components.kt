@@ -1,5 +1,11 @@
 package app.orbit.vpn.ui
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.saveable.rememberSaveable
+import app.orbit.vpn.BuildConfig
+import app.orbit.vpn.model.Subscription
+import app.orbit.vpn.model.normalizeSubscriptionUserAgent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -169,14 +175,16 @@ fun LatencyText(latency: Latency?, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SubscriptionDialog(onDismiss: () -> Unit, onAdd: (url: String, name: String?) -> Unit) {
-    var url by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
+fun SubscriptionDialog(onDismiss: () -> Unit, onAdd: (url: String, name: String?, userAgent: String?) -> Unit, initial: Subscription? = null) {
+    var url by rememberSaveable(initial?.id) { mutableStateOf(initial?.url.orEmpty()) }
+    var name by rememberSaveable(initial?.id) { mutableStateOf(initial?.name.orEmpty()) }
+    var userAgent by rememberSaveable(initial?.id) { mutableStateOf(initial?.userAgent.orEmpty()) }
+    val validAgent = runCatching { normalizeSubscriptionUserAgent(userAgent) }.isSuccess
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.add_subscription)) },
+        title = { Text(stringResource(if (initial == null) R.string.add_subscription else R.string.subscription_edit)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
                     value = url,
                     onValueChange = { url = it },
@@ -192,13 +200,20 @@ fun SubscriptionDialog(onDismiss: () -> Unit, onAdd: (url: String, name: String?
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+                OutlinedTextField(
+                    value = userAgent, onValueChange = { userAgent = it },
+                    label = { Text(stringResource(R.string.subscription_user_agent)) },
+                    placeholder = { Text("Orbit/${BuildConfig.VERSION_NAME}") },
+                    supportingText = { Text(stringResource(if (validAgent) R.string.subscription_user_agent_hint else R.string.subscription_user_agent_invalid)) },
+                    isError = !validAgent, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                )
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { onAdd(url.trim(), name.trim().ifEmpty { null }) },
-                enabled = url.trim().startsWith("http"),
-            ) { Text(stringResource(R.string.action_add_short)) }
+                onClick = { onAdd(url.trim(), name.trim().ifEmpty { null }, normalizeSubscriptionUserAgent(userAgent)) },
+                enabled = (url.trim().startsWith("https://") || url.trim().startsWith("http://")) && validAgent,
+            ) { Text(stringResource(if (initial == null) R.string.action_add_short else R.string.node_editor_save)) }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }

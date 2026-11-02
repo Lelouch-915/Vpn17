@@ -114,8 +114,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun addSubscription(url: String, name: String?) = launchBusy {
-        val count = updater.add(url, name)
+    fun addSubscription(url: String, name: String?, userAgent: String? = null) = launchBusy {
+        val count = updater.add(url, name, userAgent)
+        _messages.trySend(app.resources.getQuantityString(R.plurals.imported_servers, count, count))
+    }
+
+    fun editSubscription(id: String, url: String, name: String?, userAgent: String?) = launchBusy {
+        val count = updater.edit(id, url, name, userAgent)
         _messages.trySend(app.resources.getQuantityString(R.plurals.imported_servers, count, count))
     }
 

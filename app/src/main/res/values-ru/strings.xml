@@ -307,4 +307,8 @@
     <string name="add_node_manual">Ввести вручную</string>
     <string name="node_create_title">Новый узел</string>
     <string name="node_create_protocol">Выберите протокол</string>
+    <string name="subscription_edit">Изменить подписку</string>
+    <string name="subscription_user_agent">User-Agent (необязательно)</string>
+    <string name="subscription_user_agent_hint">Оставьте пустым для Orbit. Некоторые провайдеры выбирают формат подписки по User-Agent.</string>
+    <string name="subscription_user_agent_invalid">Используйте печатные латинские символы, цифры и знаки пунктуации.</string>
 </resources>

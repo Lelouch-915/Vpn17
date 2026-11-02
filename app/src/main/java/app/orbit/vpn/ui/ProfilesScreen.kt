@@ -89,6 +89,7 @@ fun ProfilesScreen(viewModel: MainViewModel, onScanQr: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     var addSheet by remember { mutableStateOf(false) }
     var linkDialog by remember { mutableStateOf(false) }
+    var editingSubscription by remember { mutableStateOf<Subscription?>(null) }
     var subscriptionDialog by remember { mutableStateOf(false) }
     var creating by rememberSaveable { mutableStateOf(false) }
     if (creating) {
@@ -268,6 +269,7 @@ fun ProfilesScreen(viewModel: MainViewModel, onScanQr: () -> Unit) {
                             subscription = subscription,
                             busy = busy,
                             onRefresh = { viewModel.updateSubscription(subscription) },
+                            onEdit = { editingSubscription = subscription },
                             onCopyUrl = { clipboard.setText(AnnotatedString(subscription.url)) },
                             onQr = { qr = subscription.name to subscription.url },
                             onDelete = { pendingSubscriptionDelete = subscription },
@@ -357,11 +359,17 @@ fun ProfilesScreen(viewModel: MainViewModel, onScanQr: () -> Unit) {
     if (subscriptionDialog) {
         SubscriptionDialog(
             onDismiss = { subscriptionDialog = false },
-            onAdd = { url, name ->
+            onAdd = { url, name, userAgent ->
                 subscriptionDialog = false
-                viewModel.addSubscription(url, name)
+                viewModel.addSubscription(url, name, userAgent)
             },
         )
+    }
+    editingSubscription?.let { subscription ->
+        SubscriptionDialog(initial = subscription, onDismiss = { editingSubscription = null }, onAdd = { url, name, userAgent ->
+            editingSubscription = null
+            viewModel.editSubscription(subscription.id, url, name, userAgent)
+        })
     }
     qr?.let { (title, link) -> QrDialog(title, link, onDismiss = { qr = null }) }
     pendingDelete?.let { node ->
@@ -470,6 +478,7 @@ private fun SubscriptionHeader(
     subscription: Subscription,
     busy: Boolean,
     onRefresh: () -> Unit,
+    onEdit: () -> Unit,
     onCopyUrl: () -> Unit,
     onQr: () -> Unit,
     onDelete: () -> Unit,
@@ -502,6 +511,10 @@ private fun SubscriptionHeader(
         Box {
             IconButton(onClick = { menu = true }) { Icon(Icons.Default.MoreVert, null) }
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                DropdownMenuItem(enabled = !busy, text = { Text(stringResource(R.string.subscription_edit)) }, onClick = {
+                    menu = false
+                    onEdit()
+                })
                 DropdownMenuItem(text = { Text(stringResource(R.string.action_copy_url)) }, onClick = {
                     menu = false
                     onCopyUrl()

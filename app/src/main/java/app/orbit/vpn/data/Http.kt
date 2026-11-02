@@ -1,6 +1,7 @@
 package app.orbit.vpn.data
 
 import app.orbit.vpn.BuildConfig
+import app.orbit.vpn.model.normalizeSubscriptionUserAgent
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -16,8 +17,8 @@ object Http {
     /** The server answered with a non-2xx [code]. */
     class StatusException(val code: Int) : IllegalStateException("HTTP $code")
 
-    fun get(url: String): Response {
-        val (bytes, headers) = request(url)
+    fun get(url: String, userAgent: String? = null): Response {
+        val (bytes, headers) = request(url, userAgent)
         return Response(bytes.toString(Charsets.UTF_8), headers)
     }
 
@@ -54,15 +55,15 @@ object Http {
         }
     }
 
-    private fun open(url: String): HttpURLConnection = (URL(url).openConnection() as HttpURLConnection).apply {
+    private fun open(url: String, userAgent: String? = null): HttpURLConnection = (URL(url).openConnection() as HttpURLConnection).apply {
         connectTimeout = TIMEOUT_MS
         readTimeout = TIMEOUT_MS
         instanceFollowRedirects = true
-        setRequestProperty("User-Agent", "Orbit/${BuildConfig.VERSION_NAME}")
+        setRequestProperty("User-Agent", normalizeSubscriptionUserAgent(userAgent) ?: "Orbit/${BuildConfig.VERSION_NAME}")
     }
 
-    private fun request(url: String): Pair<ByteArray, Map<String, String>> {
-        val connection = open(url)
+    private fun request(url: String, userAgent: String? = null): Pair<ByteArray, Map<String, String>> {
+        val connection = open(url, userAgent)
         try {
             val code = connection.responseCode
             if (code !in 200..299) throw StatusException(code)
