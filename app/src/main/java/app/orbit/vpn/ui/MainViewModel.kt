@@ -534,8 +534,5 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    // Last, so every property the check uses is initialized.
-    init {
-        checkForUpdatesIfDue()
-    }
+    // Automatic update checks are removed in this fork (see data/Updates.kt).
 }
