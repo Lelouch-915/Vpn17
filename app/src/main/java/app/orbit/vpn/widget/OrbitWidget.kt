@@ -67,7 +67,7 @@ class OrbitWidget : GlanceAppWidget() {
 
         val primaryText = ColorProvider(day = Color(0xFF15191E), night = Color(0xFFE6E9EC))
         val secondaryText = ColorProvider(day = Color(0xFF6B7480), night = Color(0xFF9AA3AD))
-        val green = ColorProvider(day = Color(0xFF19B46B), night = Color(0xFF2FD486))
+        val green = ColorProvider(day = Color(0xFFC8102E), night = Color(0xFFE8384F))
 
         Row(
             GlanceModifier
