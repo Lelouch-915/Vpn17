@@ -211,11 +211,13 @@ private fun bitrate(bytesPerSecond: Long): Pair<String, String> {
 private fun Logo(modifier: Modifier = Modifier) {
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Image(
-            painterResource(R.drawable.ic_launcher_foreground),
-            null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-            modifier = Modifier.size(40.dp),
+            painter = painterResource(R.drawable.ic_launcher_foreground),
+            contentDescription = null,
+            modifier = Modifier
+                .size(32.dp)
+                .clip(RoundedCornerShape(8.dp)),
         )
+        Spacer(Modifier.width(8.dp))
         Text(
             stringResource(R.string.app_name).uppercase(),
             style = MaterialTheme.typography.titleLarge,
