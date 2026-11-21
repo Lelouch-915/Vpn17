@@ -1,68 +1,46 @@
 package app.orbit.vpn.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
-/** Brand green from the design mockup. */
+/** GEAS / Code Geass crimson & charcoal palette. */
 val Brand = Color(0xFFC8102E)
 val BrandDark = Color(0xFFE8384F)
 val Upload = Color(0xFF2F80ED)
 
-private val LightColors = lightColorScheme(
-    primary = Brand,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFF9E0E4),
-    onPrimaryContainer = Color(0xFF7A0A1C),
-    secondaryContainer = Color(0xFFF9E0E4),
-    onSecondaryContainer = Color(0xFF7A0A1C),
-    background = Color(0xFFF4F6F8),
-    onBackground = Color(0xFF15191E),
-    surface = Color(0xFFF4F6F8),
-    onSurface = Color(0xFF15191E),
-    surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color.White,
-    surfaceContainer = Color.White,
-    surfaceContainerHigh = Color(0xFFEDF0F3),
-    surfaceContainerHighest = Color(0xFFE7EBEF),
-    surfaceVariant = Color(0xFFE9EDF1),
-    onSurfaceVariant = Color(0xFF6B7480),
-    outline = Color(0xFFD5DBE1),
-    outlineVariant = Color(0xFFE6EAEE),
-)
-
 private val DarkColors = darkColorScheme(
     primary = BrandDark,
-    onPrimary = Color(0xFF00391E),
-    primaryContainer = Color(0xFF103A27),
-    onPrimaryContainer = Color(0xFFB4F1CF),
-    secondaryContainer = Color(0xFF103A27),
-    onSecondaryContainer = Color(0xFFB4F1CF),
-    background = Color(0xFF0F1215),
-    onBackground = Color(0xFFE6E9EC),
-    surface = Color(0xFF0F1215),
-    onSurface = Color(0xFFE6E9EC),
-    surfaceContainerLowest = Color(0xFF171B20),
-    surfaceContainerLow = Color(0xFF171B20),
-    surfaceContainer = Color(0xFF171B20),
-    surfaceContainerHigh = Color(0xFF1F242A),
-    surfaceContainerHighest = Color(0xFF262C33),
-    surfaceVariant = Color(0xFF242A31),
-    onSurfaceVariant = Color(0xFF9AA3AD),
-    outline = Color(0xFF39414A),
-    outlineVariant = Color(0xFF2A3037),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFF361018),
+    onPrimaryContainer = Color(0xFFFFD6DD),
+    secondary = Brand,
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFF361018),
+    onSecondaryContainer = Color(0xFFFFD6DD),
+    background = Color(0xFF0B0B0E),
+    onBackground = Color(0xFFF2F2F7),
+    surface = Color(0xFF0B0B0E),
+    onSurface = Color(0xFFF2F2F7),
+    surfaceContainerLowest = Color(0xFF09090C),
+    surfaceContainerLow = Color(0xFF121217),
+    surfaceContainer = Color(0xFF16161D),
+    surfaceContainerHigh = Color(0xFF1E1E27),
+    surfaceContainerHighest = Color(0xFF262632),
+    surfaceVariant = Color(0xFF1E1E27),
+    onSurfaceVariant = Color(0xFF9E9EA8),
+    outline = Color(0xFF343442),
+    outlineVariant = Color(0xFF23232D),
 )
 
 @Composable
 fun OrbitTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) DarkColors else LightColors,
+        colorScheme = DarkColors,
         shapes = Shapes(
             small = RoundedCornerShape(10.dp),
             medium = RoundedCornerShape(16.dp),
