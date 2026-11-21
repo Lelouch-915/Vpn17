@@ -225,21 +225,6 @@ fun SettingsScreen(viewModel: MainViewModel, onExportBackup: () -> Unit, onImpor
                     "${stringResource(R.string.app_name)} ${BuildConfig.VERSION_NAME}",
                     "sing-box ${Libbox.version()} · Xray ${Xraybridge.version()}",
                 )
-                Divider()
-                val available = update.release
-                if (available != null) {
-                    SettingRow(Icons.Default.SystemUpdate, stringResource(R.string.update_available, available.version), stringResource(R.string.update_banner_hint), onClick = viewModel::showUpdate)
-                } else {
-                    SettingRow(Icons.Default.SystemUpdate, stringResource(R.string.settings_check_updates), null, onClick = { viewModel.checkForUpdates() })
-                }
-                Divider()
-                SwitchRow(
-                    Icons.Default.Update,
-                    stringResource(R.string.settings_auto_check_updates),
-                    stringResource(R.string.settings_auto_check_updates_hint),
-                    state.checkUpdates,
-                    viewModel::setCheckUpdates,
-                )
             }
         }
     }
