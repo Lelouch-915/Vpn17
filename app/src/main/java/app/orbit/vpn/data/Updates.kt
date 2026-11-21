@@ -15,7 +15,8 @@ import java.io.File
  * is signed with the same key.
  */
 object Updates {
-    const val REPO = "nettlecode/Orbit-VPN-Client"
+    // Updates are disabled in this fork: nothing may fetch or install APKs from a third party.
+    const val REPO = "disabled/updates-removed"
     private const val LATEST_URL = "https://api.github.com/repos/$REPO/releases/latest"
     private const val SUMS = "SHA256SUMS"
 
@@ -50,7 +51,7 @@ object Updates {
     }
 
     /** Blocking; call off the main thread. */
-    fun latest(): Release = json.decodeFromString(Release.serializer(), Http.get(LATEST_URL).body)
+    fun latest(): Release = throw IllegalStateException("in-app updates are disabled in this fork")
 
     /** Compares dotted version numbers; a suffix such as `-beta` is ignored. */
     fun isNewer(candidate: String, current: String): Boolean {
