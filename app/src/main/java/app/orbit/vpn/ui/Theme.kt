@@ -11,17 +11,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
 /** Brand green from the design mockup. */
-val Brand = Color(0xFF19B46B)
-val BrandDark = Color(0xFF2FD486)
+val Brand = Color(0xFFC8102E)
+val BrandDark = Color(0xFFE8384F)
 val Upload = Color(0xFF2F80ED)
 
 private val LightColors = lightColorScheme(
     primary = Brand,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFE3F7EC),
-    onPrimaryContainer = Color(0xFF0B5A35),
-    secondaryContainer = Color(0xFFE3F7EC),
-    onSecondaryContainer = Color(0xFF0B5A35),
+    primaryContainer = Color(0xFFF9E0E4),
+    onPrimaryContainer = Color(0xFF7A0A1C),
+    secondaryContainer = Color(0xFFF9E0E4),
+    onSecondaryContainer = Color(0xFF7A0A1C),
     background = Color(0xFFF4F6F8),
     onBackground = Color(0xFF15191E),
     surface = Color(0xFFF4F6F8),
