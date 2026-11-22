@@ -37,6 +37,8 @@ data class TlsSettings(
     val fingerprint: String? = null,
     val realityPublicKey: String? = null,
     val realityShortId: String? = null,
+    /** base64 SHA-256 of the server certificate's public key (sing-box certificate_public_key_sha256). */
+    val pinSpki: String? = null,
 )
 
 /**
