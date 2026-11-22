@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GEAS</string>
+    <string name="app_name">Orbit</string>
     <string name="notification_channel">VPN status</string>
 
     <string name="status_disconnected">Not connected</string>
@@ -303,6 +303,7 @@
     <string name="node_field_public_key">Reality public key</string>
     <string name="node_field_short_id">Reality short ID</string>
     <string name="node_field_insecure">Skip certificate verification</string>
+    <string name="node_field_pin">Certificate pin (SPKI SHA-256, base64)</string>
     <string name="add_node_manual">Enter manually</string>
     <string name="node_create_title">New server</string>
     <string name="node_create_protocol">Choose protocol</string>
