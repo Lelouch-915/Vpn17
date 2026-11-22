@@ -414,6 +414,7 @@ object ConfigBuilder {
             put("enabled", true)
             tls.serverName?.takeIf { it.isNotEmpty() }?.let { put("server_name", it) }
             if (tls.insecure) put("insecure", true)
+            tls.pinSpki?.let { putStrings("certificate_public_key_sha256", listOf(it)) }
             if (tls.alpn.isNotEmpty()) putStrings("alpn", tls.alpn)
             val reality = tls.realityPublicKey != null
             val fingerprint = tls.fingerprint ?: if (reality) "chrome" else null
