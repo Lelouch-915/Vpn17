@@ -100,6 +100,7 @@ fun NodeEditorScreen(node: ProxyNode, onBack: () -> Unit, onSave: (ProxyNode) ->
                             EditorField("publicKey", fields, { fields = it }, R.string.node_field_public_key)
                             EditorField("shortId", fields, { fields = it }, R.string.node_field_short_id)
                         }
+                        if (security == "tls") EditorField("pin", fields, { fields = it }, R.string.node_field_pin)
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(stringResource(R.string.node_field_insecure), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                             Switch(checked = insecure, onCheckedChange = { insecure = it })
@@ -161,6 +162,7 @@ internal fun nodeFields(node: ProxyNode): Map<String, String> = mapOf(
     "mode" to node.transport?.mode.orEmpty(), "extra" to node.transport?.extra.orEmpty(),
     "serverName" to node.tls?.serverName.orEmpty(), "alpn" to node.tls?.alpn.orEmpty().joinToString(","),
     "fingerprint" to node.tls?.fingerprint.orEmpty(), "publicKey" to node.tls?.realityPublicKey.orEmpty(), "shortId" to node.tls?.realityShortId.orEmpty(),
+    "pin" to node.tls?.pinSpki.orEmpty(),
 )
 
 internal fun editedNode(node: ProxyNode, fields: Map<String, String>, transport: String, security: String, insecure: Boolean): ProxyNode {
@@ -202,6 +204,7 @@ internal fun editedNode(node: ProxyNode, fields: Map<String, String>, transport:
             insecure = insecure, fingerprint = optional("fingerprint"),
             realityPublicKey = if (security == "reality") optional("publicKey") else null,
             realityShortId = if (security == "reality") optional("shortId") else null,
+            pinSpki = if (security == "tls") optional("pin") else null,
         ),
     )
 }
