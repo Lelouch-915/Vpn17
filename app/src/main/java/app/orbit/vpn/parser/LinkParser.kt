@@ -275,6 +275,7 @@ object LinkParser {
             fingerprint = q["fp"]?.takeIf { it.isNotEmpty() },
             realityPublicKey = q["pbk"]?.takeIf { security == "reality" },
             realityShortId = q["sid"]?.takeIf { security == "reality" },
+            pinSpki = q["pinSPKI"]?.takeIf { it.isNotEmpty() },
         )
     }
 
