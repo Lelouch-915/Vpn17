@@ -304,6 +304,7 @@
     <string name="node_field_public_key">Публичный ключ Reality</string>
     <string name="node_field_short_id">Короткий ID Reality</string>
     <string name="node_field_insecure">Не проверять сертификат</string>
+    <string name="node_field_pin">Отпечаток сертификата (SPKI SHA-256, base64)</string>
     <string name="add_node_manual">Ввести вручную</string>
     <string name="node_create_title">Новый узел</string>
     <string name="node_create_protocol">Выберите протокол</string>
